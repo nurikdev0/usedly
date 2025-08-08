@@ -1,12 +1,12 @@
 services:
- frontend-usedly:
+  frontend-usedly:
     container_name: frontend-usedly
     restart: always
     image: node:20.10.0
     ports:
       - 5000:3015
     environment:
-      - PORT=5000
+      - PORT=3015
 
     volumes:
       - ./:/usr/src/frontend

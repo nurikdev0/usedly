@@ -74,7 +74,7 @@ const Join: NextPage = () => {
 							{/* @ts-ignore */}
 							{/* <Box className={'logo'}>
 								<img src="/img/logo/logo.png" alt="" />
-								<span>Nestar</span>
+								<span>Usedly</span>
 							</Box> */}
 							<Box className={'info'}>
 								<span>{loginView ? 'login' : 'signup'}</span>

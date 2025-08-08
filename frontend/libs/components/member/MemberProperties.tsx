@@ -56,7 +56,7 @@ const MyProperties: NextPage = ({ initialInput, ...props }: any) => {
 	const likePropertyHandler = () => {};
 
 	if (device === 'mobile') {
-		return <div>NESTAR PROPERTIES MOBILE</div>;
+		return <div>Usedly PROPERTIES MOBILE</div>;
 	} else {
 		return (
 			<div id="member-properties-page">

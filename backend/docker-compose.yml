@@ -1,0 +1,32 @@
+services:
+  usedly-api:
+    container_name: usedly-api
+    restart: always
+    image: node:20.10.0
+    ports:
+      - 5001:3017
+    volumes:
+      - ./:/usr/src/backend
+    working_dir: /usr/src/backend
+    networks:
+      - monorepo-network
+    # FOR PRODUCTION
+    command: bash -c "rm -rf dist && npm install && npm run build && npm run start:prod"
+
+  usedly-batch:
+    container_name: usedly-batch
+    restart: unless-stopped
+    image: node:20.10.0
+    ports:
+      - 5002:3018
+    volumes:
+      - ./:/usr/src/backend
+    working_dir: /usr/src/backend
+    networks:
+      - monorepo-network
+    # FOR PRODUCTION
+    command: bash -c "npm install && npm run build && npm run start:prod:batch"
+
+networks:
+  monorepo-network:
+    driver: bridge

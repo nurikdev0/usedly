@@ -1,0 +1,22 @@
+services:
+ frontend-usedly:
+    container_name: frontend-usedly
+    restart: always
+    image: node:20.10.0
+    ports:
+      - 5000:3015
+    environment:
+      - PORT=3000
+
+    volumes:
+      - ./:/usr/src/frontend
+    working_dir: /usr/src/frontend
+
+    networks:
+      - client-network
+    # FOR PRODUCTION
+    command: bash -c "npm install --legacy-peer-deps && npm run build && npm run start"
+
+networks:
+  client-network:
+    driver: bridge

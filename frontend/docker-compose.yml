@@ -15,7 +15,7 @@ services:
     networks:
       - client-network
     # FOR PRODUCTION
-    command: bash -c "npm install --legacy-peer-deps && npm run build && npm run start"
+    command: bash -c "rm -rf .next && npm install --legacy-peer-deps && npm run build && npm run start"
 
 networks:
   client-network:

@@ -10,7 +10,7 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	app.useGlobalPipes(new ValidationPipe());
 	app.useGlobalInterceptors(new LoggingInterceptor());
-	app.enableCors({ origin: 'http://31.97.189.102:3015', credentials: true });
+	app.enableCors({ origin: true, credentials: true });
 
 	app.use(graphqlUploadExpress({ maxFileSize: 15000000, maxFiles: 10 }));
 	app.use('/uploads', express.static('./uploads'));

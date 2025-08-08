@@ -194,7 +194,7 @@ const Top = ({ initialInquiry, ...props }: any) => {
 					<Stack className={'container'}>
 						<Box component={'div'} className={'logo-box'}>
 							<Link href={'/'}>
-								<Box
+								{/* <Box
 									sx={{
 										fontSize: '24px',
 										fontWeight: 700,
@@ -202,7 +202,7 @@ const Top = ({ initialInquiry, ...props }: any) => {
 										letterSpacing: '0',
 										textAlign: 'left',
 									}}
-								></Box>
+								></Box> */}
 								<img src="/img/logo/logo3.png" alt="" />
 							</Link>
 						</Box>

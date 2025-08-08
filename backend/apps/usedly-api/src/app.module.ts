@@ -16,7 +16,6 @@ import { SocketModule } from './socket/socket.module';
 		GraphQLModule.forRoot({
 			driver: ApolloDriver,
 			playground: true,
-			introspection: true,
 			uploads: false,
 			autoSchemaFile: true,
 			formatError: (error: T) => {

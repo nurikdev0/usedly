@@ -4,7 +4,7 @@ import createUploadLink from 'apollo-upload-client/public/createUploadLink.js';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/client/link/error';
-import { getJwtToken } from '../libs/auth';
+import { deleteStorage, getJwtRefreshToken, getJwtToken, isAccessTokenExpired, setJwtToken } from '../libs/auth';
 import { TokenRefreshLink } from 'apollo-link-token-refresh';
 import { sweetErrorAlert } from '../libs/sweetAlert';
 import { socketVar } from './store';
@@ -18,14 +18,76 @@ function getHeaders() {
 	return headers;
 }
 
+// TOKEN REFRESH LINK
 const tokenRefreshLink = new TokenRefreshLink({
 	accessTokenField: 'accessToken',
 	isTokenValidOrUndefined: () => {
-		return true;
-	}, // @ts-ignore
+		const token = getJwtToken();
+		if (!token) return true;
+		return !isAccessTokenExpired();
+	},
 	fetchAccessToken: () => {
-		// execute refresh token
-		return null;
+		const refreshToken = getJwtRefreshToken();
+		if (!refreshToken) {
+			throw new Error('No refresh token available');
+		}
+		return fetch(process.env.REACT_APP_API_GRAPHQL_URL as any, {
+			// GraphQL endpointiga
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				query: `
+				mutation RefreshToken($token: String!) {
+				refreshToken(token: $token) {
+					accessToken
+				}
+				}
+			`,
+				variables: {
+					token: refreshToken,
+				},
+			}),
+		});
+	},
+	handleFetch: (accessToken: string) => {
+		setJwtToken(accessToken);
+	},
+	handleResponse: (operation, accessTokenField) => async (response: Response) => {
+		const text = await response.text();
+
+		if (!response.ok) {
+			throw new Error(`Refresh failed: ${response.status} ${response.statusText}`);
+		}
+
+		try {
+			const json = JSON.parse(text);
+
+			if (json.data?.refreshToken?.accessToken) {
+				return {
+					accessToken: json.data.refreshToken.accessToken,
+				};
+			} else if (json.errors) {
+				const errorMessage = json.errors[0]?.message || 'GraphQL error';
+				throw new Error(errorMessage);
+			} else {
+				throw new Error('No access token in response');
+			}
+		} catch (error) {
+			throw new Error('Invalid JSON response');
+		}
+	},
+	handleError: (err: Error) => {
+		console.error('Token refresh failed:', err);
+		sweetErrorAlert('Session expired. Please login again.');
+		deleteStorage();
+
+		if (typeof window !== 'undefined') {
+			setTimeout(() => {
+				window.location.href = '/account/join';
+			}, 2000);
+		}
 	},
 });
 
@@ -79,7 +141,7 @@ function createIsomorphicLink() {
 
 		/* WEBSOCKET SUBSCRIPTION LINK */
 		const wsLink = new WebSocketLink({
-			uri: process.env.REACT_APP_API_WS ?? 'ws://127.0.0.1:3007',
+			uri: process.env.REACT_APP_API_WS ?? 'ws://127.0.0.1:3017',
 			options: {
 				reconnect: false,
 				timeout: 30000,

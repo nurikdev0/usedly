@@ -33,4 +33,25 @@ export class AuthService {
 		member._id = shapeIntoMongoObjectId(member._id);
 		return member;
 	}
+
+	public async createRefreshToken(member: Member): Promise<string> {
+		const payload: T = { memberNick: 'TEST' };
+		Object.keys(member['_doc'] ? member['_doc'] : member).map((ele) => {
+			payload[`${ele}`] = member[`${ele}`];
+		});
+		delete payload.memberPassword;
+
+		return await this.jwtService.signAsync(payload, {
+			secret: process.env.REFRESH_SECRET_TOKEN,
+			expiresIn: '30d',
+		});
+	}
+
+	public async verifyRefreshToken(token: string): Promise<Member> {
+		const member = await this.jwtService.verifyAsync(token, {
+			secret: process.env.REFRESH_SECRET_TOKEN,
+		});
+		member._id = shapeIntoMongoObjectId(member._id);
+		return member;
+	}
 }

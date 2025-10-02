@@ -29,6 +29,7 @@ export const SIGN_UP = gql`
 			createdAt
 			updatedAt
 			accessToken
+			refreshToken
 		}
 	}
 `;
@@ -57,6 +58,7 @@ export const LOGIN = gql`
 			createdAt
 			updatedAt
 			accessToken
+			refreshToken
 		}
 	}
 `;

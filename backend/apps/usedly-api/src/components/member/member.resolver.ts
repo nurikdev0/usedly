@@ -1,7 +1,7 @@
-import { Mutation, Resolver, Query, Args } from '@nestjs/graphql';
+import { Mutation, Resolver, Query, Args, Context } from '@nestjs/graphql';
 import { MemberService } from './member.service';
 import { AgentsInquiry, LoginInput, MemberInput, MembersInquiry } from '../../libs/dto/member/member.input';
-import { Member, Members } from '../../libs/dto/member/member';
+import { AccessTokenResponse, Member, Members } from '../../libs/dto/member/member';
 import { BadRequestException, InternalServerErrorException, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
@@ -30,6 +30,11 @@ export class MemberResolver {
 	public async login(@Args('input') input: LoginInput): Promise<Member> {
 		console.log('Mutation: login');
 		return await this.memberService.login(input);
+	}
+
+	@Mutation(() => AccessTokenResponse)
+	public async refreshToken(@Args('token') token: string): Promise<AccessTokenResponse> {
+		return await this.memberService.refreshToken(token);
 	}
 
 	@UseGuards(AuthGuard)

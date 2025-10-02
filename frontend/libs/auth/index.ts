@@ -15,11 +15,35 @@ export function setJwtToken(token: string) {
 	localStorage.setItem('accessToken', token);
 }
 
+export function getJwtRefreshToken(): any {
+	if (typeof window !== 'undefined') {
+		return localStorage.getItem('refreshToken') ?? '';
+	}
+}
+
+export function setJwtRefreshToken(token: string) {
+	localStorage.setItem('refreshToken', token);
+}
+
+export const isAccessTokenExpired = (): boolean => {
+	const token = getJwtToken();
+	if (!token) return true;
+
+	try {
+		const payload = JSON.parse(atob(token.split('.')[1]));
+		const currentTime = Date.now() / 1000;
+		return payload.exp < currentTime;
+	} catch {
+		return true;
+	}
+};
+
 export const logIn = async (nick: string, password: string): Promise<void> => {
 	try {
-		const { jwtToken } = await requestJwtToken({ nick, password });
+		const { jwtToken, jwtRefreshToken } = await requestJwtToken({ nick, password });
 
 		if (jwtToken) {
+			setJwtRefreshToken(jwtRefreshToken);
 			updateStorage({ jwtToken });
 			updateUserInfo(jwtToken);
 		}
@@ -36,7 +60,7 @@ const requestJwtToken = async ({
 }: {
 	nick: string;
 	password: string;
-}): Promise<{ jwtToken: string }> => {
+}): Promise<{ jwtToken: string; jwtRefreshToken: string }> => {
 	const apolloClient = await initializeApollo();
 
 	try {
@@ -47,9 +71,9 @@ const requestJwtToken = async ({
 		});
 
 		console.log('---------- login ----------');
-		const { accessToken } = result?.data?.login;
+		const { accessToken, refreshToken } = result?.data?.login;
 
-		return { jwtToken: accessToken };
+		return { jwtToken: accessToken, jwtRefreshToken: refreshToken };
 	} catch (err: any) {
 		console.log('request token err', err.graphQLErrors);
 		switch (err.graphQLErrors[0].message) {
@@ -66,9 +90,9 @@ const requestJwtToken = async ({
 
 export const signUp = async (nick: string, password: string, phone: string, type: string): Promise<void> => {
 	try {
-		const { jwtToken } = await requestSignUpJwtToken({ nick, password, phone, type });
-
+		const { jwtToken, jwtRefreshToken } = await requestSignUpJwtToken({ nick, password, phone, type });
 		if (jwtToken) {
+			setJwtRefreshToken(jwtRefreshToken);
 			updateStorage({ jwtToken });
 			updateUserInfo(jwtToken);
 		}
@@ -89,7 +113,7 @@ const requestSignUpJwtToken = async ({
 	password: string;
 	phone: string;
 	type: string;
-}): Promise<{ jwtToken: string }> => {
+}): Promise<{ jwtToken: string; jwtRefreshToken: string }> => {
 	const apolloClient = await initializeApollo();
 
 	try {
@@ -102,9 +126,9 @@ const requestSignUpJwtToken = async ({
 		});
 
 		console.log('---------- login ----------');
-		const { accessToken } = result?.data?.signup;
+		const { accessToken, refreshToken } = result?.data?.signup;
 
-		return { jwtToken: accessToken };
+		return { jwtToken: accessToken, jwtRefreshToken: refreshToken };
 	} catch (err: any) {
 		console.log('request token err', err.graphQLErrors);
 		switch (err.graphQLErrors[0].message) {
@@ -159,8 +183,9 @@ export const logOut = () => {
 	window.location.reload();
 };
 
-const deleteStorage = () => {
+export const deleteStorage = () => {
 	localStorage.removeItem('accessToken');
+	localStorage.removeItem('refreshToken');
 	window.localStorage.setItem('logout', Date.now().toString());
 };
 

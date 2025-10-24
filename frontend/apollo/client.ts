@@ -32,7 +32,7 @@ const tokenRefreshLink = new TokenRefreshLink({
 			throw new Error('No refresh token available');
 		}
 		return fetch(process.env.REACT_APP_API_GRAPHQL_URL as any, {
-			// GraphQL endpointiga
+			// GraphQL
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -53,6 +53,11 @@ const tokenRefreshLink = new TokenRefreshLink({
 	},
 	handleFetch: (accessToken: string) => {
 		setJwtToken(accessToken);
+
+		// refresh socket
+		const oldSocket = socketVar();
+		if (oldSocket) oldSocket.close();
+		const newSocket = new LoggingWebSocket(process.env.REACT_APP_API_WS as string);
 	},
 	handleResponse: (operation, accessTokenField) => async (response: Response) => {
 		const text = await response.text();

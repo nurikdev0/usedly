@@ -56,7 +56,7 @@ const MyMenu = () => {
 					</Stack>
 				</Stack>
 				<Stack className={'sections'}>
-					<Stack className={'section'} style={{ height: user.memberType === 'AGENT' ? '228px' : '153px' }}>
+					<Stack className={'section'} style={{ height: user.memberType === 'AGENT' ? '248px' : '153px' }}>
 						<Typography className="title" variant={'h5'}>
 							MANAGE LISTINGS
 						</Typography>
@@ -244,6 +244,32 @@ const MyMenu = () => {
 
 										<Typography className={'sub-title'} variant={'subtitle1'} component={'p'}>
 											My Followings
+										</Typography>
+									</div>
+								</Link>
+							</ListItem>
+							<ListItem className={pathname === 'messages' ? 'focus' : ''}>
+								<Link
+									href={{
+										pathname: '/mypage',
+										query: { category: 'messages' },
+									}}
+									scroll={false}
+								>
+									<div className="flex-box items-center gap-2">
+										<svg
+											className="com-icon"
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											width="16"
+											height="16"
+											fill={category === 'messages' ? 'white' : 'black'}
+										>
+											<path d="M2 3a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H7.828l-4.414 4.414A1 1 0 0 1 2 21V3zm2 1v14.586L6.586 17H20V4H4zm3 4h10a1 1 0 1 1 0 2H7a1 1 0 1 1 0-2zm0 4h6a1 1 0 1 1 0 2H7a1 1 0 1 1 0-2z" />
+										</svg>
+
+										<Typography className="sub-title" variant="subtitle1" component="p">
+											Messages
 										</Typography>
 									</div>
 								</Link>

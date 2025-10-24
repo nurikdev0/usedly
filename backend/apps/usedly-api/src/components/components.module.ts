@@ -9,6 +9,8 @@ import { FollowModule } from './follow/follow.module';
 import { BoardArticleModule } from './board-article/board-article.module';
 import { NotificationModule } from './notification/notification.module';
 import { NoticeModule } from './notice/notice.module';
+import { MessageModule } from './message/message.module';
+import { ChatRoomModule } from './chat-room/chat-room.module';
 
 @Module({
 	imports: [
@@ -22,6 +24,8 @@ import { NoticeModule } from './notice/notice.module';
 		FollowModule,
 		NotificationModule,
 		NoticeModule,
+		MessageModule,
+		ChatRoomModule,
 	],
 })
 export class ComponentsModule {}

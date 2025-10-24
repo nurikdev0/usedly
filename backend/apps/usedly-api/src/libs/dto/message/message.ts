@@ -1,9 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
-import { NotificationGroup, NotificationStatus, NotificationType } from '../../enums/notification.enum';
-import { Member, TotalCounter } from '../member/member';
-import { Property } from '../property/property';
-import { BoardArticle } from '../board-article/board-article';
+import { TotalCounter } from '../member/member';
 
 @ObjectType()
 export class Message {
@@ -25,8 +22,11 @@ export class Message {
 	@Field(() => String)
 	messageStatus: string;
 
-	@Field(() => String, { nullable: true })
-	attachments?: ObjectId;
+	@Field(() => [String], { nullable: true })
+	attachments?: string[];
+
+	@Field(() => Date, { nullable: true })
+	createdAt?: Date;
 }
 
 @ObjectType()

@@ -726,3 +726,42 @@ export const GET_ALL_NOTIFICATIONS = gql`
 		}
 	}
 `;
+
+/**************************
+ *         CHAT ROOMS        *
+ *************************/
+
+export const GET_ALL_CHAT_ROOMS = gql`
+	query GetChatRooms($input: ChatRoomsInquiry!) {
+		getChatRooms(input: $input) {
+			list {
+				_id
+				propertyId
+				sellerId
+				buyerId
+				lastMessage
+			}
+		}
+	}
+`;
+
+/**************************
+ *         MESSAGES       *
+ *************************/
+
+export const GET_ALL_MESSAGES = gql`
+	query GetMessages($input: MessagesInquiry!) {
+		getMessages(input: $input) {
+			list {
+				_id
+				chatRoomId
+				senderId
+				receiverId
+				messageText
+				messageStatus
+				attachments
+				createdAt
+			}
+		}
+	}
+`;

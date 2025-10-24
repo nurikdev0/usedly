@@ -36,7 +36,7 @@ const MessageSchema = new Schema(
 			type: [String],
 		},
 	},
-	{ timestamps: true, collection: 'Messages' },
+	{ timestamps: true, collection: 'messages' },
 );
 
 export default MessageSchema;

@@ -32,7 +32,7 @@ export class MessageInput {
 }
 
 @InputType()
-class MISearch {
+class MMISearch {
 	@IsOptional()
 	@Field(() => String, { nullable: true })
 	chatRoomId?: ObjectId;
@@ -60,6 +60,6 @@ export class MessagesInquiry {
 	direction?: Direction;
 
 	@IsNotEmpty()
-	@Field(() => MISearch)
-	search: MISearch;
+	@Field(() => MMISearch)
+	search: MMISearch;
 }

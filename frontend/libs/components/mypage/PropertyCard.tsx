@@ -55,79 +55,81 @@ export const PropertyCard = (props: PropertyCardProps) => {
 		return <div>MOBILE PROPERTY CARD</div>;
 	} else
 		return (
-			<Stack className="property-card-box">
-				<Stack className="image-box" onClick={() => pushPropertyDetail(property?._id)}>
-					<img src={`${process.env.REACT_APP_API_URL}/${property.propertyImages[0]}`} alt="" />
-				</Stack>
-				<Stack className="information-box" onClick={() => pushPropertyDetail(property?._id)}>
-					<Typography className="name">{property.propertyTitle}</Typography>
-					<Typography className="address">{property.propertyAddress}</Typography>
-					<Typography className="price">
-						<strong>${formatterStr(property?.propertyPrice)}</strong>
-					</Typography>
-				</Stack>
-				<Stack className="date-box">
-					<Typography className="date">
-						<Moment format="DD MMMM, YYYY">{property.createdAt}</Moment>
-					</Typography>
-				</Stack>
-				<Stack className="status-box">
-					<Stack className="coloured-box" sx={{ background: '#E5F0FD' }} onClick={handleClick}>
-						<Typography className="status" sx={{ color: '#3554d1' }}>
-							{property.propertyStatus}
+			<>
+				<Stack className="property-card-box">
+					<Stack className="image-box" onClick={() => pushPropertyDetail(property?._id)}>
+						<img src={`${process.env.REACT_APP_API_URL}/${property.propertyImages[0]}`} alt="" />
+					</Stack>
+					<Stack className="information-box" onClick={() => pushPropertyDetail(property?._id)}>
+						<Typography className="name">{property.propertyTitle}</Typography>
+						<Typography className="address">{property.propertyAddress}</Typography>
+						<Typography className="price">
+							<strong>${formatterStr(property?.propertyPrice)}</strong>
 						</Typography>
 					</Stack>
-				</Stack>
-				{!memberPage && property.propertyStatus !== 'SOLD' && (
-					<Menu
-						anchorEl={anchorEl}
-						open={open}
-						onClose={handleClose}
-						PaperProps={{
-							elevation: 0,
-							sx: {
-								width: '70px',
-								mt: 1,
-								ml: '10px',
-								overflow: 'visible',
-								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-							},
-							style: {
-								padding: 0,
-								display: 'flex',
-								justifyContent: 'center',
-							},
-						}}
-					>
-						{property.propertyStatus === 'ACTIVE' && (
-							<>
-								<MenuItem
-									disableRipple
-									onClick={() => {
-										handleClose();
-										updatePropertyHandler(PropertyStatus.SOLD, property?._id);
-									}}
-								>
-									Sold
-								</MenuItem>
-							</>
-						)}
-					</Menu>
-				)}
-
-				<Stack className="views-box">
-					<Typography className="views">{property.propertyViews.toLocaleString()}</Typography>
-				</Stack>
-				{!memberPage && property.propertyStatus === PropertyStatus.ACTIVE && (
-					<Stack className="action-box">
-						<IconButton className="icon-button" onClick={() => pushEditProperty(property._id)}>
-							<ModeIcon className="buttons" />
-						</IconButton>
-						<IconButton className="icon-button" onClick={() => deletePropertyHandler(property._id)}>
-							<DeleteIcon className="buttons" />
-						</IconButton>
+					<Stack className="date-box">
+						<Typography className="date">
+							<Moment format="DD MMMM, YYYY">{property.createdAt}</Moment>
+						</Typography>
 					</Stack>
-				)}
-			</Stack>
+					<Stack className="status-box">
+						<Stack className="coloured-box" sx={{ background: '#E5F0FD' }} onClick={handleClick}>
+							<Typography className="status" sx={{ color: '#3554d1' }}>
+								{property.propertyStatus}
+							</Typography>
+						</Stack>
+					</Stack>
+					{!memberPage && property.propertyStatus !== 'SOLD' && (
+						<Menu
+							anchorEl={anchorEl}
+							open={open}
+							onClose={handleClose}
+							PaperProps={{
+								elevation: 0,
+								sx: {
+									width: '70px',
+									mt: 1,
+									ml: '10px',
+									overflow: 'visible',
+									filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+								},
+								style: {
+									padding: 0,
+									display: 'flex',
+									justifyContent: 'center',
+								},
+							}}
+						>
+							{property.propertyStatus === 'ACTIVE' && (
+								<>
+									<MenuItem
+										disableRipple
+										onClick={() => {
+											handleClose();
+											updatePropertyHandler(PropertyStatus.SOLD, property?._id);
+										}}
+									>
+										Sold
+									</MenuItem>
+								</>
+							)}
+						</Menu>
+					)}
+
+					<Stack className="views-box">
+						<Typography className="views">{property.propertyViews.toLocaleString()}</Typography>
+					</Stack>
+					{!memberPage && property.propertyStatus === PropertyStatus.ACTIVE && (
+						<Stack className="action-box">
+							<IconButton className="icon-button" onClick={() => pushEditProperty(property._id)}>
+								<ModeIcon className="buttons" />
+							</IconButton>
+							<IconButton className="icon-button" onClick={() => deletePropertyHandler(property._id)}>
+								<DeleteIcon className="buttons" />
+							</IconButton>
+						</Stack>
+					)}
+				</Stack>
+			</>
 		);
 };

@@ -16,8 +16,8 @@ export class ChatRoom {
 	@Field(() => String)
 	buyerId: ObjectId;
 
-	@Field(() => String)
-	lastMessage: string;
+	@Field(() => String, { nullable: true })
+	lastMessage?: string;
 }
 
 @ObjectType()

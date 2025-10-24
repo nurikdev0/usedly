@@ -18,9 +18,9 @@ export class ChatRoomInput {
 	@Field(() => String)
 	buyerId: ObjectId;
 
-	@IsNotEmpty()
-	@Field(() => String)
-	lastMessage: string;
+	@IsOptional()
+	@Field(() => String, { nullable: true })
+	lastMessage?: string;
 }
 
 @InputType()
@@ -28,7 +28,13 @@ class ChISearch {
 	@IsOptional()
 	@Field(() => String, { nullable: true })
 	propertyId?: ObjectId;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
 	sellerId?: ObjectId;
+
+	@IsOptional()
+	@Field(() => String, { nullable: true })
 	buyerId?: ObjectId;
 }
 

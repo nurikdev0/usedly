@@ -20,6 +20,8 @@ import MemberFollowings from '../../libs/components/member/MemberFollowings';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { LIKE_TARGET_MEMBER, SUBSCRIBE, UNSUBSCRIBE } from '../../apollo/user/mutation';
 import { Messages } from '../../libs/config';
+import ChatList from '../../libs/components/mypage/ChatList ';
+import ChatMessages from '../../libs/components/mypage/ChatMessages ';
 
 export const getStaticProps = async ({ locale }: any) => ({
 	props: {
@@ -145,6 +147,8 @@ const MyPage: NextPage = () => {
 											redirectToMemberPageHandler={redirectToMemberPageHandler}
 										/>
 									)}
+									{category === 'messages' && <ChatList />}
+									{category === 'messagesList' && <ChatMessages />}
 								</Stack>
 							</Stack>
 						</Stack>

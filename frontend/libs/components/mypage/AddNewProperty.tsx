@@ -150,7 +150,6 @@ const AddProperty = ({ initialValues, ...props }: any) => {
 		try {
 			// @ts-ignore
 			insertPropertyData._id = getPropertyData?.getProperty?._id;
-			console.log('data---------', insertPropertyData);
 			const result = await updateProperty({
 				variables: {
 					input: insertPropertyData,

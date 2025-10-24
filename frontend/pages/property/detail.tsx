@@ -17,7 +17,7 @@ import { Property } from '../../libs/types/property/property';
 import moment from 'moment';
 import { formatterStr } from '../../libs/utils';
 import { REACT_APP_API_URL } from '../../libs/config';
-import { userVar } from '../../apollo/store';
+import { socketVar, userVar } from '../../apollo/store';
 import { CommentInput, CommentsInquiry } from '../../libs/types/comment/comment.input';
 import { Comment } from '../../libs/types/comment/comment';
 import { CommentGroup } from '../../libs/enums/comment.enum';
@@ -45,6 +45,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	const device = useDeviceDetect();
 	const router = useRouter();
 	const user = useReactiveVar(userVar);
+	const socket = useReactiveVar(socketVar);
 	const [propertyId, setPropertyId] = useState<string | null>(null);
 	const [property, setProperty] = useState<Property | null>(null);
 	const [slideImage, setSlideImage] = useState<string>('');
@@ -147,6 +148,23 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 	/** HANDLERS **/
 	const changeImageHandler = (image: string) => {
 		setSlideImage(image);
+	};
+
+	const joinChatRoom = async () => {
+		const payload = {
+			event: 'joinChatRoom',
+			data: { propertyId, sellerId: property?.memberId, buyerId: user._id },
+		};
+
+		socket.send(JSON.stringify(payload));
+		await router.push(
+			{
+				pathname: '/mypage',
+				query: { category: 'messages' },
+			},
+			undefined,
+			{ scroll: true },
+		);
 	};
 
 	const likePropertyHandler = async (user: T, id: string) => {
@@ -523,6 +541,23 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'info-box'}>
 									<Button className={'send-message'}>
 										<Typography className={'title'}>Send Message</Typography>
+										<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+											<g clipPath="url(#clip0_6975_593)">
+												<path
+													d="M16.0556 0.5H6.2778C6.03214 0.5 5.83334 0.698792 5.83334 0.944458C5.83334 1.19012 6.03214 1.38892 6.2778 1.38892H14.9827L0.630219 15.7413C0.456594 15.915 0.456594 16.1962 0.630219 16.3698C0.71701 16.4566 0.83076 16.5 0.944469 16.5C1.05818 16.5 1.17189 16.4566 1.25872 16.3698L15.6111 2.01737V10.7222C15.6111 10.9679 15.8099 11.1667 16.0556 11.1667C16.3013 11.1667 16.5001 10.9679 16.5001 10.7222V0.944458C16.5 0.698792 16.3012 0.5 16.0556 0.5Z"
+													fill="white"
+												/>
+											</g>
+											<defs>
+												<clipPath id="clip0_6975_593">
+													<rect width="16" height="16" fill="white" transform="translate(0.5 0.5)" />
+												</clipPath>
+											</defs>
+										</svg>
+									</Button>
+
+									<Button className={'send-message'} onClick={() => joinChatRoom()}>
+										<Typography className={'title'}>Start Chat</Typography>
 										<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
 											<g clipPath="url(#clip0_6975_593)">
 												<path

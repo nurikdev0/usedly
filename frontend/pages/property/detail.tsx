@@ -522,7 +522,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 										</Stack>
 									</Stack>
 								</Stack>
-								<Stack className={'info-box'}>
+								{/* <Stack className={'info-box'}>
 									<Typography className={'sub-title'}>Name</Typography>
 									<input type={'text'} placeholder={'Enter your name'} />
 								</Stack>
@@ -537,9 +537,9 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 								<Stack className={'info-box'}>
 									<Typography className={'sub-title'}>Message</Typography>
 									<textarea placeholder={'Hello, I am interested in \n' + '[Renovated property at  floor]'}></textarea>
-								</Stack>
+								</Stack> */}
 								<Stack className={'info-box'}>
-									<Button className={'send-message'}>
+									{/* <Button className={'send-message'}>
 										<Typography className={'title'}>Send Message</Typography>
 										<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
 											<g clipPath="url(#clip0_6975_593)">
@@ -554,7 +554,7 @@ const PropertyDetail: NextPage = ({ initialComment, ...props }: any) => {
 												</clipPath>
 											</defs>
 										</svg>
-									</Button>
+									</Button> */}
 
 									<Button className={'send-message'} onClick={() => joinChatRoom()}>
 										<Typography className={'title'}>Start Chat</Typography>
